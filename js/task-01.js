@@ -1,47 +1,43 @@
-//
-//
-const ul = document.querySelector("#categories");
-const li = ul.children;
-const categories = document.querySelectorAll("#categories h2");
-const elements = document.querySelectorAll(".item li");
-const catTextTable = [...categories].map((v) => v.innerText);
-const eleTextTable = [...elements].map((v) => v.innerText);
-const listOfCategories = [
-  ...[...document.querySelectorAll("#categories")][0].children,
-];
-const oList = document.querySelectorAll("#categories")[0].children;
-//const cat = [...listOfCategories].map((v, i, t) => [...v]);
 //-------------------------------------------
+//not doing it this way
+//-------------------------------------------
+
+const oList = document.querySelectorAll("#categories")[0].children;
 //childElementCount
 //innerText, children
-const cSum = (o, i) => o[i].childElementCount;
-const cLength = (o) => o.length;
-const kids = (o, i) => o[i].children;
-
-function getTxt(table) {
-  return table.innerText;
-}
-function getChildNum(o) {
-  return o.childElementCount;
+const listLength = (o) => o.length;
+const list = (o, i = 0) => o[i].children;
+const nestedList = (o, i = 0, j = 1) => list(o[i].children, j);
+function makeList(o) {
+  return [...o].map((v) => v.innerText);
 }
 //-------------------------------------------
-console.log(kids(kids(oList, 0), 1));
-console.log(kids(oList, 0));
-console.log(cSum(oList, 1));
-console.log(listOfCategories[0].children);
-console.log(listOfCategories);
-//console.log(eleTextTable);
+let txt = `Number of categories : ` + listLength(oList);
+for (let i = 0; i < listLength(oList); i++) {
+  txt += `\n\nCategory: ${makeList(list(oList, i))[0]}
+Elements: ${makeList(nestedList(oList, i)).length}
+( ${makeList(nestedList(oList, i))} )`;
+}
 //-------------------------------------------
-console.log(
-  [...li][0].innerText[0] +
-    `Number of categories: 3
+//doing it this way
+//-------------------------------------------
+const categoriesCount = document.querySelectorAll("#categories > li").length;
+const categoriesTitle = (number) =>
+  document.querySelector("#categories").children[number].querySelector("h2")
+    .innerText;
+const categoriesElementsCount = (number) =>
+  document
+    .querySelector("#categories")
+    .children[number].children[1].querySelectorAll("li").length;
 
-Category: Animals
-Elements: 4
+let txt2 = `Number of categories:` + categoriesCount;
+for (let i = 0; i < categoriesCount; i++) {
+  txt2 +=
+    `\n\nCategory: ` +
+    categoriesTitle(i) +
+    `\nElements: ` +
+    categoriesElementsCount(i);
+}
 
-Category: Products
-Elements: 3
-
-Category: Technologies
-Elements: 5`
-);
+//-------------------------------------------
+console.log(txt2);
